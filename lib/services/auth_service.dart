@@ -1,5 +1,6 @@
 import 'package:chat_app_starter/views/email_verification_screen.dart';
 import 'package:chat_app_starter/views/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,10 @@ class AuthService {
 
       await credential.user!.updateDisplayName(userName);
 
-      // await credential.user!.sendEmailVerification();
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).set({
+        "email": email,
+        "username": userName
+      });
 
 
     }catch(e){
