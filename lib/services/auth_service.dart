@@ -1,4 +1,7 @@
+import 'package:chat_app_starter/views/email_verification_screen.dart';
+import 'package:chat_app_starter/views/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
 
@@ -20,10 +23,29 @@ class AuthService {
 
       await credential.user!.updateDisplayName(userName);
 
-      await credential.user!.sendEmailVerification();
+      // await credential.user!.sendEmailVerification();
 
 
     }catch(e){
+
+    }
+
+  }
+
+  static Future<void> login(String email, String password,BuildContext context)async{
+
+    try{
+
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+
+      if(credential.user!.emailVerified){
+        Navigator.push(context, MaterialPageRoute(builder:(context) => HomeScreen(),));
+      }else{
+        Navigator.push(context, MaterialPageRoute(builder:(context) => EmailVerificationScreen(),));
+      }
+
+    }catch(e){
+
 
     }
 

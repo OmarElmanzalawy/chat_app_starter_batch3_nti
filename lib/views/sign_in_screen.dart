@@ -1,3 +1,4 @@
+import 'package:chat_app_starter/services/auth_service.dart';
 import 'package:chat_app_starter/views/sign_up_screen.dart';
 import 'package:chat_app_starter/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +149,9 @@ class SignInScreen extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () async {
-                         
+                           await AuthService.login(
+                              _emailController.text, 
+                              _passwordController.text, context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,

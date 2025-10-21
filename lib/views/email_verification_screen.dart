@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chat_app_starter/services/auth_service.dart';
 import 'package:chat_app_starter/views/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   @override
   void initState() {
+    FirebaseAuth.instance.currentUser!.sendEmailVerification();
     timer = Timer.periodic(Duration(seconds: 3), (_)async{
      final isUserVerified =  await AuthService.checkVerificationStatus();
      if(isUserVerified){
