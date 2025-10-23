@@ -1,4 +1,5 @@
 import 'package:chat_app_starter/constants/app_colors.dart';
+import 'package:chat_app_starter/services/auth_service.dart';
 import 'package:chat_app_starter/widgets/action_button.dart';
 import 'package:chat_app_starter/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -103,8 +104,8 @@ class ResetPasswordScreen extends StatelessWidget {
                     const SizedBox(height: 20,),
                     CustomTextField(hintText: "Enter your email", labelText: "Email", controller: _emailController),
                     const SizedBox(height: 20,),
-                    ActionButton(onPressed: (){
-                      
+                    ActionButton(onPressed: ()async{
+                      await AuthService.sendResetEmail(_emailController.text, context);
                     },
                     title: "Send Recovery Email",
                     )

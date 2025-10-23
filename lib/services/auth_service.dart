@@ -14,6 +14,18 @@ class AuthService {
 
   }
 
+  static Future<void> sendResetEmail(String email, BuildContext context)async{
+
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email sent to $email")));
+
+    }catch(e){
+
+    }
+
+  }
+
   static Future<void> register(String email,String password,String userName)async{
 
     try{
