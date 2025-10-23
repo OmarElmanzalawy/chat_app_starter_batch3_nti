@@ -2,9 +2,10 @@ import 'package:chat_app_starter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({super.key,required this.onPressed});
+  const ActionButton({super.key,required this.onPressed,required this.title});
 
   final VoidCallback onPressed;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +38,8 @@ class ActionButton extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          child: const Text(
-                            'Create Account',
+                          child:  Text(
+                            title,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,

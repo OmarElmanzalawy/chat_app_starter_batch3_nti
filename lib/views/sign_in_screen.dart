@@ -1,4 +1,5 @@
 import 'package:chat_app_starter/services/auth_service.dart';
+import 'package:chat_app_starter/views/reset_password_screen.dart';
 import 'package:chat_app_starter/views/sign_up_screen.dart';
 import 'package:chat_app_starter/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,7 @@ class SignInScreen extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                           
+                           Navigator.push(context, MaterialPageRoute(builder:(context) => ResetPasswordScreen(),));
                           },
                           child: const Text(
                             'Forgot Password?',
