@@ -1,8 +1,11 @@
 import 'package:chat_app_starter/constants/app_colors.dart';
+import 'package:chat_app_starter/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key});
+  const UserCard({super.key,required this.model});
+
+  final UserModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class UserCard extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 30,
                   backgroundImage: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"),
-                  child: Text("M",style: TextStyle(color: Colors.green.shade900),),
+                  child: Text(model.username[0].toUpperCase(),style: TextStyle(color: Colors.green.shade900),),
                 
                 ),
               ),
@@ -44,12 +47,12 @@ class UserCard extends StatelessWidget {
             spacing: 5,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Mohamed",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+              Text(model.username,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
               Row(
                 children: [
                   Icon(Icons.mail_outline,color: Colors.grey.shade600,size: 15,),
                   const SizedBox(width: 5,),
-                  Text("test@gmail.com",style: TextStyle(color: Colors.grey.shade600),)
+                  Text(model.email,style: TextStyle(color: Colors.grey.shade600),)
                 ],
               ),
               Row(
