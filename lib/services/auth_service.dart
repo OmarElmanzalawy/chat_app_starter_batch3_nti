@@ -1,3 +1,4 @@
+import 'package:chat_app_starter/models/user_model.dart';
 import 'package:chat_app_starter/views/email_verification_screen.dart';
 import 'package:chat_app_starter/views/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +16,6 @@ class AuthService {
   }
 
   static Future<void> sendResetEmail(String email, BuildContext context)async{
-
     try{
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email sent to $email")));
@@ -36,10 +36,11 @@ class AuthService {
 
       await credential.user!.updateDisplayName(userName);
 
-      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).set({
-        "email": email,
-        "username": userName
-      });
+      final user = UserModel(email: email, id: credential.user!.uid, username: userName);
+
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).set(
+      user.toJson()
+      );
 
 
     }catch(e){
