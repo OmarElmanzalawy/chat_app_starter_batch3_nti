@@ -30,6 +30,18 @@ class ChatService {
 
   }
 
+  static Stream<List<MessageModel>> fetchMessageStream(String chatId){
+    final collectionStream =  FirebaseFirestore.instance.collection("chats").doc(chatId).collection("messeges").snapshots();
+
+    return collectionStream.map(
+      (snapshot) {
+        print("document length: ${snapshot.docs.length}");
+       return snapshot.docs.map((document) =>  MessageModel.fromJson(document.data())).toList();
+      }
+    );
+  }
+
+
   static Future<bool> checkIfIdExists(String chatId)async{
     final document = await FirebaseFirestore.instance.collection("chats").doc(chatId).get();
     return document.exists;
@@ -40,7 +52,8 @@ class ChatService {
   }
 
   static Future<void> sendMessage(MessageModel message,String chatId)async{
-    await FirebaseFirestore.instance.collection("chats").doc(chatId).collection("messages").doc(message.id).set(message.toJson());
+    await FirebaseFirestore.instance.collection("chats").doc(chatId)
+    .collection("messages").doc(message.id).set(message.toJson());
   }
 
 }

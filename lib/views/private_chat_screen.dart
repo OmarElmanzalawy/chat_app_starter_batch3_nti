@@ -6,15 +6,34 @@ import 'package:chat_app_starter/widgets/chat_bubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class PrivateChatScreen extends StatelessWidget {
+class PrivateChatScreen extends StatefulWidget {
   PrivateChatScreen({super.key,required this.chatId,required this.userModel});
 
-  final TextEditingController messageController = TextEditingController();
   final String chatId;
   final UserModel userModel;
 
   @override
+  State<PrivateChatScreen> createState() => _PrivateChatScreenState();
+}
+
+class _PrivateChatScreenState extends State<PrivateChatScreen> {
+  final TextEditingController messageController = TextEditingController();
+  late final Stream<List<MessageModel>> chat_stream;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    chat_stream = ChatService.fetchMessageStream(widget.chatId);
+    chat_stream.listen((data){
+      print("new data coming from stream");
+      print(data);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(widget.chatId);
     return Scaffold(
       backgroundColor:  AppColors.chatBackground, 
       appBar: AppBar(
@@ -29,7 +48,7 @@ class PrivateChatScreen extends StatelessWidget {
             CircleAvatar(
               radius: 18,
               backgroundColor: Colors.grey.shade300,
-              child: Text(userModel.username[0].toUpperCase())
+              child: Text(widget.userModel.username[0].toUpperCase())
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -37,7 +56,7 @@ class PrivateChatScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                    Text(
-                    userModel.username,
+                    widget.userModel.username,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -71,14 +90,25 @@ class PrivateChatScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  itemCount: 5,
-                  itemBuilder:(context, index) {
-                    return ChatBubble(
+            child: StreamBuilder(
+              stream: chat_stream,
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                if(snapshot.data == null){
+                  return Center(
+                    child: Text("No messages yet"),
+                  );
+                }
+                return ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      itemCount: data!.length,
+                      itemBuilder:(context, index) {
+                        return ChatBubble(
+                        );
+                      },
                     );
-                  },
-                ),
+              }
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
@@ -149,9 +179,9 @@ class PrivateChatScreen extends StatelessWidget {
                         id: UniqueKey().toString(),
                         message: messageController.text,
                         senderId: FirebaseAuth.instance.currentUser!.uid,
-                        senderName: userModel.username,
+                        senderName: widget.userModel.username,
                         timeStamp: DateTime.now());
-                    await ChatService.sendMessage(message, chatId);
+                    await ChatService.sendMessage(message, widget.chatId);
                     },
                     icon: const Icon(
                       Icons.send,
