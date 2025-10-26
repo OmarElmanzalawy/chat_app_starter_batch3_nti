@@ -93,7 +93,7 @@ class PrivateChatScreen extends StatelessWidget {
                     cursorColor: AppColors.appBarBackground,
                     decoration: InputDecoration(
                       hintText: "Enter message",
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder( 
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide(color: Colors.grey.shade300,), 
                       ),
