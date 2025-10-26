@@ -1,12 +1,17 @@
 import 'package:chat_app_starter/constants/app_colors.dart';
+import 'package:chat_app_starter/models/message_model.dart';
+import 'package:chat_app_starter/models/user_model.dart';
+import 'package:chat_app_starter/services/chat_service.dart';
 import 'package:chat_app_starter/widgets/chat_bubble.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PrivateChatScreen extends StatelessWidget {
-  PrivateChatScreen({super.key,required this.chatId});
+  PrivateChatScreen({super.key,required this.chatId,required this.userModel});
 
   final TextEditingController messageController = TextEditingController();
   final String chatId;
+  final UserModel userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +29,15 @@ class PrivateChatScreen extends StatelessWidget {
             CircleAvatar(
               radius: 18,
               backgroundColor: Colors.grey.shade300,
-              child: Text("M")
+              child: Text(userModel.username[0].toUpperCase())
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Receiver name",
+                   Text(
+                    userModel.username,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -140,7 +145,13 @@ class PrivateChatScreen extends StatelessWidget {
                   ),
                   child: IconButton(
                     onPressed: () async {
-                     
+                      final message = MessageModel(
+                        id: UniqueKey().toString(),
+                        message: messageController.text,
+                        senderId: FirebaseAuth.instance.currentUser!.uid,
+                        senderName: userModel.username,
+                        timeStamp: DateTime.now());
+                    await ChatService.sendMessage(message, chatId);
                     },
                     icon: const Icon(
                       Icons.send,

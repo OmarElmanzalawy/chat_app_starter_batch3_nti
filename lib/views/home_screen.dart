@@ -62,11 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 if(doesExist){
                   print("Chat already existst");
-                  Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(chatId: chatId,),));
+                  Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(chatId: chatId,userModel: appBrain.users.value[index],),));
                 }else{
                   print("Creating chat for the first time");
                   await ChatService.createChat(chatId);
-                  Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(chatId: chatId),));
+                  Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(chatId: chatId,userModel: appBrain.users.value[index]),));
                 }
               },
               child: UserCard(

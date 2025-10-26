@@ -1,3 +1,4 @@
+import 'package:chat_app_starter/models/message_model.dart';
 import 'package:chat_app_starter/models/user_model.dart';
 import 'package:chat_app_starter/view_model/app_brain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,6 +37,10 @@ class ChatService {
 
   static Future<void> createChat(String chatId)async{
     await FirebaseFirestore.instance.collection("chats").doc(chatId).set({});
+  }
+
+  static Future<void> sendMessage(MessageModel message,String chatId)async{
+    await FirebaseFirestore.instance.collection("chats").doc(chatId).collection("messages").doc(message.id).set(message.toJson());
   }
 
 }
