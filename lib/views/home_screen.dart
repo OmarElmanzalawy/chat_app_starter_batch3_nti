@@ -1,6 +1,7 @@
 import 'package:chat_app_starter/constants/app_colors.dart';
 import 'package:chat_app_starter/services/chat_service.dart';
 import 'package:chat_app_starter/view_model/app_brain.dart';
+import 'package:chat_app_starter/views/private_chat_screen.dart';
 import 'package:chat_app_starter/widgets/user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
           return ListView.builder(
           itemCount: appBrain.users.value.length,
           itemBuilder:(context, index) {
-            return UserCard(
-              model: appBrain.users.value[index],
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(),));
+              },
+              child: UserCard(
+                model: appBrain.users.value[index],
+              ),
             );
           },
           );
