@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text("Whatsapp",style: TextStyle(color: Colors.white),),
             const SizedBox(height: 10,),
-            Text("3 users available",style: TextStyle(color: Colors.grey.shade300,fontSize: 14),)
+            Text("${appBrain.users.value.length} users available",style: TextStyle(color: Colors.grey.shade300,fontSize: 14),)
           ],
         ),
       ),
@@ -52,8 +52,22 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: appBrain.users.value.length,
           itemBuilder:(context, index) {
             return GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(),));
+              onTap: () async{
+                // Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(),));
+                final receiverId = appBrain.users.value[index].id;
+                final chatId = ChatService.createChatId(receiverId);
+                print("chatId: $chatId");
+
+                final doesExist = await ChatService.checkIfIdExists(chatId);
+
+                if(doesExist){
+                  print("Chat already existst");
+                  Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(chatId: chatId,),));
+                }else{
+                  print("Creating chat for the first time");
+                  await ChatService.createChat(chatId);
+                  Navigator.push(context, MaterialPageRoute(builder:(context) => PrivateChatScreen(chatId: chatId),));
+                }
               },
               child: UserCard(
                 model: appBrain.users.value[index],

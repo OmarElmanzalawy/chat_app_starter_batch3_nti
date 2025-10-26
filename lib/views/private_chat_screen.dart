@@ -3,9 +3,10 @@ import 'package:chat_app_starter/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 
 class PrivateChatScreen extends StatelessWidget {
-  PrivateChatScreen({super.key});
+  PrivateChatScreen({super.key,required this.chatId});
 
   final TextEditingController messageController = TextEditingController();
+  final String chatId;
 
   @override
   Widget build(BuildContext context) {

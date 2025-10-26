@@ -15,4 +15,27 @@ class ChatService {
     appBrain.users.value = users;
   }
 
+  static String createChatId(String receiverId){
+    String chatId = "";
+    final myId = FirebaseAuth.instance.currentUser!.uid;
+
+    if(myId.compareTo(receiverId) < 0){
+      chatId = "$myId$receiverId";
+    }else{
+      chatId = "$receiverId$myId";
+      
+    }
+    return chatId;
+
+  }
+
+  static Future<bool> checkIfIdExists(String chatId)async{
+    final document = await FirebaseFirestore.instance.collection("chats").doc(chatId).get();
+    return document.exists;
+  }
+
+  static Future<void> createChat(String chatId)async{
+    await FirebaseFirestore.instance.collection("chats").doc(chatId).set({});
+  }
+
 }
