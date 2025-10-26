@@ -1,10 +1,14 @@
 import 'dart:ui';
 
+import 'package:chat_app_starter/models/message_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatBubble extends StatelessWidget {
-  const ChatBubble({super.key});
+  const ChatBubble({super.key,required this.model});
+
+  final MessageModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +64,7 @@ class ChatBubble extends StatelessWidget {
                           ),
                         ),
                       Text(
-                        "message",
+                        model.message,
                         style: TextStyle(
                           color: isMe ? Colors.black87 : Colors.black87,
                           fontSize: 16,
@@ -73,7 +77,7 @@ class ChatBubble extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "2 minutes ago",
+                            timeago.format(model.timeStamp),
                             style: TextStyle(
                               color: isMe ? Colors.black54 : Colors.grey.shade600,
                               fontSize: 11,

@@ -22,7 +22,7 @@ class MessageModel {
       message: json["message"], 
       senderId: json["senderId"],
       senderName: json["senderName"],
-      timeStamp: (json["timestamp"] as Timestamp).toDate()
+      timeStamp: (json["timeStamp"] as Timestamp).toDate(),
       );
   }
 

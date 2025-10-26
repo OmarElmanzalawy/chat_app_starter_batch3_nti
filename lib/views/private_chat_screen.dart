@@ -93,7 +93,10 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
             child: StreamBuilder(
               stream: chat_stream,
               builder: (context, snapshot) {
-                final data = snapshot.data;
+                
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(child: CircularProgressIndicator());
+                }
                 if(snapshot.data == null){
                   return Center(
                     child: Text("No messages yet"),
@@ -101,9 +104,10 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                 }
                 return ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                      itemCount: data!.length,
+                      itemCount: snapshot.data?.length ?? 0,
                       itemBuilder:(context, index) {
                         return ChatBubble(
+                          model: snapshot.data![index],
                         );
                       },
                     );
@@ -126,6 +130,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: messageController,
                     cursorColor: AppColors.appBarBackground,
                     decoration: InputDecoration(
                       hintText: "Enter message",
@@ -175,13 +180,20 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                   ),
                   child: IconButton(
                     onPressed: () async {
-                      final message = MessageModel(
-                        id: UniqueKey().toString(),
-                        message: messageController.text,
-                        senderId: FirebaseAuth.instance.currentUser!.uid,
-                        senderName: widget.userModel.username,
-                        timeStamp: DateTime.now());
-                    await ChatService.sendMessage(message, widget.chatId);
+                       if (messageController.text.trim().isEmpty) return;
+
+                        final message = MessageModel(
+                          id: UniqueKey().toString(),
+                          message: messageController.text.trim(),
+                          senderId: FirebaseAuth.instance.currentUser!.uid,
+                          senderName: FirebaseAuth.instance.currentUser!.displayName ?? "User",
+                          timeStamp: DateTime.now()
+                        );
+
+                        await ChatService.sendMessage(
+                          message,
+                          widget.chatId
+                        );
                     },
                     icon: const Icon(
                       Icons.send,

@@ -31,14 +31,15 @@ class ChatService {
   }
 
   static Stream<List<MessageModel>> fetchMessageStream(String chatId){
-    final collectionStream =  FirebaseFirestore.instance.collection("chats").doc(chatId).collection("messeges").snapshots();
+    final collectionStream =  FirebaseFirestore.instance.collection("chats").doc(chatId).collection("messages").orderBy("timeStamp").snapshots();
 
     return collectionStream.map(
       (snapshot) {
-        print("document length: ${snapshot.docs.length}");
        return snapshot.docs.map((document) =>  MessageModel.fromJson(document.data())).toList();
       }
     );
+    
+    
   }
 
 
