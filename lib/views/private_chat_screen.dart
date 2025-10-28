@@ -97,7 +97,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator());
                 }
-                if(snapshot.data == null){
+                if(snapshot.data == null || snapshot.data!.isEmpty){
                   return Center(
                     child: Text("No messages yet"),
                   );
@@ -108,6 +108,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                       itemBuilder:(context, index) {
                         return ChatBubble(
                           model: snapshot.data![index],
+                          chatId: widget.chatId,
                         );
                       },
                     );
@@ -194,6 +195,8 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                           message,
                           widget.chatId
                         );
+
+                        messageController.clear();
                     },
                     icon: const Icon(
                       Icons.send,

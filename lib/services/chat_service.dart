@@ -3,6 +3,8 @@ import 'package:chat_app_starter/models/user_model.dart';
 import 'package:chat_app_starter/view_model/app_brain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
 class ChatService {
 
@@ -28,6 +30,11 @@ class ChatService {
     }
     return chatId;
 
+  }
+
+  static Future<void> deleteMessege(String chatId,String messegeId,BuildContext context)async{
+    await FirebaseFirestore.instance.collection("chats").doc(chatId).collection("messages").doc(messegeId).delete();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Message has been deleted successfully")));
   }
 
   static Stream<List<MessageModel>> fetchMessageStream(String chatId){
