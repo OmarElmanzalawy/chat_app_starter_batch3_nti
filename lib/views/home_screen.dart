@@ -1,7 +1,9 @@
 import 'package:chat_app_starter/constants/app_colors.dart';
+import 'package:chat_app_starter/services/auth_service.dart';
 import 'package:chat_app_starter/services/chat_service.dart';
 import 'package:chat_app_starter/view_model/app_brain.dart';
 import 'package:chat_app_starter/views/private_chat_screen.dart';
+import 'package:chat_app_starter/views/sign_in_screen.dart';
 import 'package:chat_app_starter/widgets/user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
         actionsPadding: EdgeInsets.all(12),
         actions: [
           Icon(Icons.search),
-          Icon(Icons.more_vert)
+          IconButton(onPressed: ()async{
+            await AuthService.logout();
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context) => SignInScreen(),), (route) => false);
+          }, icon: Icon(Icons.logout))
+          // Icon(Icons.more_vert)
         ],
         toolbarHeight: 100,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -41,7 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text("Whatsapp",style: TextStyle(color: Colors.white),),
             const SizedBox(height: 10,),
-            Text("${appBrain.users.value.length} users available",style: TextStyle(color: Colors.grey.shade300,fontSize: 14),)
+            ValueListenableBuilder(
+              valueListenable: appBrain.users,
+              builder:(context, value, child) =>  Text("${appBrain.users.value.length} users available",style: TextStyle(color: Colors.grey.shade300,fontSize: 14),))
           ],
         ),
       ),

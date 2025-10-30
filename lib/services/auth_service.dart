@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 class AuthService {
 
+  static Future<void> logout()async{
+    await FirebaseAuth.instance.signOut();
+  }
+
 
   static Future<bool> checkVerificationStatus()async{
 
