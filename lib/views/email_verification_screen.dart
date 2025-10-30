@@ -29,16 +29,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> with 
     animationController.forward();
 
     animationController.repeat(reverse: true);
-    // FirebaseAuth.instance.currentUser!.sendEmailVerification();
-    // timer = Timer.periodic(Duration(seconds: 3), (_)async{
-    //  final isUserVerified =  await AuthService.checkVerificationStatus();
-    //  if(isUserVerified){
-    //   timer.cancel();
-    //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context) {
-    //     return HomeScreen();
-    //   },), (route) => false);
-    //  }
-    // });
+    FirebaseAuth.instance.currentUser!.sendEmailVerification();
+    timer = Timer.periodic(Duration(seconds: 3), (_)async{
+     final isUserVerified =  await AuthService.checkVerificationStatus();
+     if(isUserVerified){
+      timer.cancel();
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context) {
+        return HomeScreen();
+      },), (route) => false);
+     }
+    });
     super.initState();
   }
 
